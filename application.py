@@ -2,10 +2,10 @@ from flask import Flask, request,render_template, redirect,session
 from flask_sqlalchemy import SQLAlchemy
 import bcrypt
 
-application = Flask(__name__)
-application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-db = SQLAlchemy(application)
-application.secret_key = 'secret_key'
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+db = SQLAlchemy(app)
+app.secret_key = 'secret_key'
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -21,7 +21,7 @@ class User(db.Model):
     def check_password(self,password):
         return bcrypt.checkpw(password.encode('utf-8'),self.password.encode('utf-8'))
 
-with application.app_context():
+with app.app_context():
     db.create_all()
 
 
@@ -77,4 +77,4 @@ def logout():
     return redirect('/login')
 
 if __name__ == '__main__':
-    application.run(debug=True)
+    app.run(debug=True)
